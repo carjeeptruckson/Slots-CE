@@ -1,0 +1,2112 @@
+	section	.text,"ax",@progbits
+	assume	adl = 1
+	section	.text,"ax",@progbits
+	public	_pre_scale_bg_tile
+_pre_scale_bg_tile:
+	ld	hl, -9
+	call	__frameset
+	ld	bc, 0
+	ld	hl, (_bg_tile_sprite)
+	add	hl, bc
+	or	a, a
+	sbc	hl, bc
+	jr	nz, BB0_2
+BB0_1:
+	ld	sp, ix
+	pop	ix
+	ret
+BB0_2:
+	ld	hl, (_bg_tile_scaled)
+	ld	(hl), 32
+	ld	iy, (_bg_tile_scaled)
+	ld	(iy + 1), 32
+	ld	iy, (_bg_tile_sprite)
+	lea	hl, iy + 2
+	ld	(ix - 3), hl
+	ld	iy, (_bg_tile_scaled)
+	lea	iy, iy + 34
+	ld	de, 16
+	push	bc
+	pop	hl
+BB0_3:
+	ld	(ix - 6), hl
+	or	a, a
+	sbc	hl, de
+	jr	z, BB0_1
+	ld	(ix - 9), iy
+BB0_5:
+	push	bc
+	pop	hl
+	ld	de, 16
+	or	a, a
+	sbc	hl, de
+	jr	z, BB0_7
+	lea	hl, iy
+	ld	iy, (ix - 3)
+	add	iy, bc
+	ld	a, (iy)
+	push	hl
+	pop	iy
+	ld	(iy - 32), a
+	ld	(iy - 31), a
+	ld	(iy), a
+	ld	(iy + 1), a
+	inc	bc
+	lea	iy, iy + 2
+	jr	BB0_5
+BB0_7:
+	ld	hl, (ix - 6)
+	inc	hl
+	ld	iy, (ix - 3)
+	lea	iy, iy + 16
+	ld	(ix - 3), iy
+	ld	iy, (ix - 9)
+	lea	iy, iy + 64
+	ld	bc, 0
+	ld	de, 16
+	jr	BB0_3
+	section	.text,"ax",@progbits
+
+	section	.text,"ax",@progbits
+	public	_draw_scaled_sprite
+_draw_scaled_sprite:
+	ld	hl, -19
+	call	__frameset
+	ld	iy, (ix + 6)
+	ld	hl, (ix + 12)
+	ld	bc, 320
+	ld	de, 0
+	lea	iy, iy + 2
+	ld	(ix - 3), iy
+	ld	iy, (-1900524)
+	call	__imulu
+	push	hl
+	pop	bc
+	ld	hl, (ix + 9)
+	add	hl, bc
+	push	hl
+	pop	bc
+	add	iy, bc
+	ld	bc, 321
+	add	iy, bc
+	ld	(ix - 6), iy
+	ld	bc, 16
+	ld	a, 1
+BB1_1:
+	push	de
+	pop	hl
+	or	a, a
+	sbc	hl, bc
+	jp	z, BB1_13
+	push	de
+	pop	hl
+	ld	c, a
+	call	__ishl
+	push	hl
+	pop	iy
+	ld	bc, (ix + 12)
+	add	iy, bc
+	lea	hl, iy
+	ld	(ix - 9), de
+	ld	de, 147
+	or	a, a
+	sbc	hl, de
+	call	pe, __setflag
+	jp	p, BB1_13
+	lea	hl, iy
+	ld	de, 36
+	or	a, a
+	sbc	hl, de
+	call	pe, __setflag
+	jp	p, BB1_5
+BB1_4:
+	ld	bc, (ix - 9)
+	inc	bc
+	ld	iy, (ix - 3)
+	lea	iy, iy + 16
+	ld	(ix - 3), iy
+	ld	de, 640
+	ld	hl, (ix - 6)
+	add	hl, de
+	ld	(ix - 6), hl
+	push	bc
+	pop	de
+	ld	bc, 16
+	jr	BB1_1
+BB1_5:
+	lea	hl, iy
+	ld	bc, -36
+	add	hl, bc
+	ld	(ix - 18), hl
+	ld	hl, (ix - 6)
+	ld	(ix - 12), hl
+	ld	bc, 0
+BB1_6:
+	push	bc
+	pop	hl
+	ld	de, 16
+	or	a, a
+	sbc	hl, de
+	jr	z, BB1_4
+	ld	(ix - 15), iy
+	ld	iy, (ix - 3)
+	add	iy, bc
+	ld	a, (iy)
+	ld	iy, (ix - 15)
+	ld	(ix - 19), a
+	or	a, a
+	jr	z, BB1_12
+	lea	hl, iy
+	ld	de, 36
+	or	a, a
+	sbc	hl, de
+	jr	z, BB1_10
+	ld	hl, (ix - 12)
+	push	hl
+	pop	iy
+	ld	de, -321
+	add	iy, de
+	ld	a, (ix - 19)
+	ld	(iy), a
+	push	hl
+	pop	iy
+	inc	de
+	add	iy, de
+	ld	(iy), a
+	ld	iy, (ix - 15)
+BB1_10:
+	ld	hl, (ix - 18)
+	ld	de, 110
+	or	a, a
+	sbc	hl, de
+	jr	nc, BB1_12
+	lea	hl, iy
+	ld	iy, (ix - 12)
+	ld	a, (ix - 19)
+	ld	(iy - 1), a
+	ld	(iy), a
+	push	hl
+	pop	iy
+BB1_12:
+	inc	bc
+	lea	hl, iy
+	ld	iy, (ix - 12)
+	lea	iy, iy + 2
+	ld	(ix - 12), iy
+	push	hl
+	pop	iy
+	ld	a, 1
+	jr	BB1_6
+BB1_13:
+	ld	sp, ix
+	pop	ix
+	ret
+	section	.text,"ax",@progbits
+
+	section	.text,"ax",@progbits
+	public	_shuffle_reels
+_shuffle_reels:
+	ld	hl, -25
+	call	__frameset
+	ld	iy, 0
+	ld	hl, (-851900)
+	ld	a, (-851897)
+	ld	(ix - 18), hl
+	ld	(ix - 19), a
+	ld	e, a
+	call	__lcmpzero
+	jr	z, BB2_2
+	ld	a, 0
+	jr	BB2_3
+BB2_2:
+	ld	a, 1
+BB2_3:
+	bit	0, a
+	jr	z, BB2_5
+	ld	hl, -5390609
+	ld	(ix - 18), hl
+BB2_5:
+	bit	0, a
+	jr	z, BB2_7
+	ld	a, -34
+	ld	(ix - 19), a
+BB2_7:
+	ld	a, 65
+	ld	hl, _reel_strips
+	ld	de, _initial_reel_strip
+	ld	(ix - 6), de
+	ld	de, 3
+	ld	(ix - 9), hl
+	lea	bc, iy
+BB2_8:
+	push	bc
+	pop	hl
+	or	a, a
+	sbc	hl, de
+	ld	(ix - 3), iy
+	ld	(ix - 12), bc
+	push	bc
+	pop	hl
+	ld	iy, (ix - 6)
+	jp	z, BB2_15
+BB2_9:
+	ld	(ix - 15), hl
+	ld	bc, 6
+	call	__idivu
+	ld	bc, -18
+	call	__imulu
+	push	hl
+	pop	bc
+	ld	hl, (ix - 3)
+	ld	de, 18
+	or	a, a
+	sbc	hl, de
+	jr	z, BB2_11
+	lea	hl, iy + 3
+	ld	(ix - 22), hl
+	add	iy, bc
+	ld	hl, (iy)
+	ld	de, (ix - 3)
+	push	de
+	pop	bc
+	ld	iy, (ix - 9)
+	add	iy, bc
+	ld	(iy), hl
+	ld	hl, (ix - 15)
+	inc	hl
+	ld	bc, 3
+	push	de
+	pop	iy
+	add	iy, bc
+	ld	(ix - 3), iy
+	ld	iy, (ix - 22)
+	jr	BB2_9
+BB2_11:
+	ld	iy, 15
+	ld	de, 6
+	ld	(ix - 15), de
+	ld	de, 3
+	ld	bc, (ix - 12)
+BB2_12:
+	ld	(ix - 3), iy
+	lea	hl, iy
+	add	hl, bc
+	or	a, a
+	sbc	hl, bc
+	jp	z, BB2_14
+	ld	hl, (ix - 18)
+	ld	e, (ix - 19)
+	ld	bc, -3781011
+	ld	d, a
+	call	__lmulu
+	ld	bc, 12345
+	xor	a, a
+	call	__ladd
+	ld	bc, -1
+	ld	a, 127
+	call	__land
+	xor	a, a
+	ld	(ix - 18), hl
+	ld	(ix - 19), e
+	ld	bc, (ix - 15)
+	call	__lremu
+	ld	a, d
+	push	hl
+	pop	de
+	ld	bc, (ix - 3)
+	ld	hl, (ix - 9)
+	add	hl, bc
+	ld	(ix - 25), hl
+	ld	bc, (hl)
+	ld	(ix - 22), bc
+	ld	hl, (ix - 12)
+	ld	bc, 18
+	call	__imulu
+	push	hl
+	pop	bc
+	ld	iy, _reel_strips
+	add	iy, bc
+	ex	de, hl
+	ld	bc, 3
+	call	__imulu
+	push	hl
+	pop	de
+	add	iy, de
+	ld	hl, (iy)
+	lea	bc, iy
+	ld	iy, (ix - 25)
+	ld	(iy), hl
+	ld	iy, (ix - 3)
+	ld	de, (ix - 22)
+	push	bc
+	pop	hl
+	ld	(hl), de
+	ld	bc, (ix - 12)
+	ld	de, (ix - 15)
+	dec	de
+	ld	(ix - 15), de
+	ld	de, -3
+	add	iy, de
+	ld	de, 3
+	jp	BB2_12
+BB2_14:
+	inc	bc
+	ld	iy, (ix - 6)
+	lea	iy, iy + 3
+	ld	(ix - 6), iy
+	ld	iy, (ix - 9)
+	lea	iy, iy + 18
+	ld	(ix - 9), iy
+	ld	iy, 0
+	jp	BB2_8
+BB2_15:
+	ld	sp, ix
+	pop	ix
+	ret
+	section	.text,"ax",@progbits
+
+	section	.text,"ax",@progbits
+	public	_main
+_main:
+	ld	hl, -56
+	call	__frameset
+	call	_init_gfx
+	call	_shuffle_reels
+	call	_load_assets
+	call	_pre_scale_bg_tile
+	call	_load_save
+	bit	0, a
+	jr	z, BB3_2
+	ld	hl, (_g_data)
+	add	hl, bc
+	or	a, a
+	sbc	hl, bc
+	ld	hl, 10
+	jr	z, BB3_3
+	jr	BB3_4
+BB3_2:
+	ld	hl, 100
+BB3_3:
+	ld	(_g_data), hl
+BB3_4:
+	lea	hl, ix - 32
+	ld	(ix - 47), hl
+	ld	de, 36
+	or	a, a
+	sbc	hl, hl
+	push	hl
+	pop	bc
+BB3_5:
+	push	bc
+	pop	hl
+	or	a, a
+	sbc	hl, de
+	jr	z, BB3_7
+	push	bc
+	pop	de
+	ld	hl, _reels
+	add	hl, de
+	ld	(ix - 35), hl
+	or	a, a
+	sbc	hl, hl
+	ex	de, hl
+	ld	hl, (ix - 35)
+	ld	(hl), de
+	ld	iy, (ix - 35)
+	ld	(iy + 3), 0
+	ld	iy, (ix - 35)
+	ld	(iy + 8), 0
+	ld	iy, (ix - 35)
+	ld	(iy + 4), de
+	ld	iy, (ix - 35)
+	ld	(iy + 7), 0
+	ld	(ix - 38), bc
+	call	_rand
+	ld	bc, 6
+	call	__irems
+	ld	iy, (ix - 35)
+	ld	(iy + 9), hl
+	ld	de, 12
+	ld	hl, (ix - 38)
+	add	hl, de
+	push	hl
+	pop	bc
+	ld	de, 36
+	jr	BB3_5
+BB3_7:
+	call	_get_bet_input
+	push	hl
+	pop	de
+	add	hl, bc
+	or	a, a
+	sbc	hl, bc
+	jp	z, BB3_43
+	ld	hl, (_g_data)
+	ld	(ix - 41), de
+	or	a, a
+	sbc	hl, de
+	ld	(_g_data), hl
+	ld	hl, _reels+9
+	push	hl
+	pop	iy
+	ld	bc, 0
+BB3_9:
+	push	bc
+	pop	hl
+	ld	de, 3
+	or	a, a
+	sbc	hl, de
+	jr	z, BB3_11
+	ld	hl, (iy)
+	ld	(ix - 38), bc
+	ld	bc, 40
+	call	__imulu
+	push	hl
+	pop	bc
+	ld	(ix - 35), iy
+	push	bc
+	pop	iy
+	add	iy, iy
+	sbc	hl, hl
+	ld	a, l
+	call	__ltof
+	ld	iy, (ix - 35)
+	ld	(iy - 9), bc
+	ld	iy, (ix - 35)
+	ld	(iy - 6), a
+	ld	iy, (ix - 35)
+	ld	(iy - 1), 1
+	ld	hl, (ix - 38)
+	ld	iy, (ix - 38)
+	add	iy, iy
+	sbc	hl, hl
+	ld	bc, (ix - 38)
+	ld	a, l
+	call	__ltof
+	or	a, a
+	sbc	hl, hl
+	ld	e, 64
+	call	__fmul
+	ld	hl, 4194304
+	inc	e
+	call	__fadd
+	ld	iy, (ix - 35)
+	ld	(iy - 5), bc
+	ld	iy, (ix - 35)
+	ld	(iy - 2), a
+	call	_rand
+	ld	iy, (ix - 35)
+	ld	bc, 6
+	call	__irems
+	ld	bc, (ix - 38)
+	ld	(iy), hl
+	inc	bc
+	lea	iy, iy + 12
+	jp	BB3_9
+BB3_11:
+	ld	bc, 0
+	push	bc
+	pop	iy
+	ld	l, b
+BB3_12:
+	ld	a, l
+	and	a, 1
+	bit	0, a
+	jp	nz, BB3_32
+	ld	(ix - 44), l
+	push	bc
+	pop	hl
+	ld	de, 30
+	or	a, a
+	sbc	hl, de
+	jr	c, BB3_16
+	lea	hl, iy
+	add	hl, bc
+	or	a, a
+	sbc	hl, bc
+	jr	nz, BB3_16
+	xor	a, a
+	ld	(_reels+8), a
+	ld	iy, 1
+BB3_16:
+	push	bc
+	pop	hl
+	ld	de, 50
+	or	a, a
+	sbc	hl, de
+	jr	c, BB3_19
+	lea	hl, iy
+	ld	de, 1
+	or	a, a
+	sbc	hl, de
+	jr	nz, BB3_19
+	xor	a, a
+	ld	(_reels+20), a
+	ld	iy, 2
+BB3_19:
+	push	bc
+	pop	hl
+	ld	de, 70
+	or	a, a
+	sbc	hl, de
+	ld	(ix - 35), bc
+	jr	c, BB3_22
+	lea	hl, iy
+	ld	de, 2
+	or	a, a
+	sbc	hl, de
+	jr	nz, BB3_22
+	xor	a, a
+	ld	(_reels+32), a
+	ld	iy, 3
+BB3_22:
+	ld	(ix - 38), iy
+	call	_logic_spin_reels
+	ld	hl, (ix - 38)
+	ld	de, 3
+	or	a, a
+	sbc	hl, de
+	jr	nz, BB3_31
+	ld	iy, 4
+	ld	d, iyh
+BB3_24:
+	lea	hl, iy
+	ld	bc, 40
+	or	a, a
+	sbc	hl, bc
+	jr	z, BB3_28
+	ld	(ix - 50), iy
+	lea	bc, iy
+	ld	iy, _reels
+	add	iy, bc
+	ld	bc, (iy)
+	or	a, a
+	sbc	hl, hl
+	ld	e, h
+	ld	a, (iy + 3)
+	call	__fcmp
+	ld	a, 1
+	jp	m, BB3_27
+	ld	a, d
+BB3_27:
+	ld	de, 12
+	ld	iy, (ix - 50)
+	add	iy, de
+	ld	d, a
+	jr	BB3_24
+BB3_28:
+	ld	a, d
+	and	a, 1
+	bit	0, a
+	ld	a, 1
+	jr	z, BB3_30
+	ld	a, (ix - 44)
+BB3_30:
+	ld	(ix - 44), a
+BB3_31:
+	ld	hl, (ix - 41)
+	ld	de, (ix - 35)
+	inc	de
+	ld	(ix - 35), de
+	push	hl
+	push	hl
+	call	_draw_ui
+	pop	hl
+	pop	hl
+	call	_draw_reels
+	call	_gfx_SwapDraw
+	ld	bc, (ix - 35)
+	ld	l, (ix - 44)
+	ld	iy, (ix - 38)
+	jp	BB3_12
+BB3_32:
+	call	_check_win
+	ld	bc, (ix - 41)
+	call	__imulu
+	push	hl
+	pop	de
+	ld	hl, (_g_data)
+	ld	(ix - 35), de
+	add	hl, de
+	add	hl, bc
+	or	a, a
+	sbc	hl, bc
+	ld	de, 10
+	jr	z, BB3_34
+	ex	de, hl
+BB3_34:
+	ld	(_g_data), de
+	call	_save_game
+	ld	hl, (ix - 35)
+	add	hl, bc
+	or	a, a
+	sbc	hl, bc
+	jr	nz, BB3_36
+	ld	hl, 400
+	push	hl
+	call	_delay
+	jp	BB3_42
+BB3_36:
+	push	hl
+	ld	hl, _.str
+	push	hl
+	ld	hl, (ix - 47)
+	push	hl
+	call	_sprintf
+	pop	hl
+	pop	hl
+	pop	hl
+	ld	hl, 3
+	push	hl
+	push	hl
+	call	_gfx_SetTextScale
+	pop	hl
+	pop	hl
+	ld	hl, (ix - 47)
+	push	hl
+	call	_gfx_GetStringWidth
+	push	hl
+	pop	iy
+	pop	hl
+	lea	hl, iy
+	ld	de, 40
+	add	hl, de
+	ld	(ix - 38), hl
+	ld	hl, 280
+	lea	de, iy
+	or	a, a
+	sbc	hl, de
+	ld	bc, 2
+	call	__idivs
+	ld	(ix - 35), hl
+	ld	hl, 320
+	or	a, a
+	sbc	hl, de
+	call	__idivs
+	ld	(ix - 53), hl
+	ld	hl, (ix - 35)
+	add	hl, bc
+	ld	(ix - 56), hl
+	ld	de, 36
+	add	iy, de
+	ld	(ix - 50), iy
+	ld	bc, 0
+BB3_37:
+	push	bc
+	pop	hl
+	ld	de, 12
+	or	a, a
+	sbc	hl, de
+	jp	z, BB3_41
+	push	hl
+	ld	hl, (ix - 41)
+	push	hl
+	ld	(ix - 44), bc
+	call	_draw_ui
+	pop	hl
+	pop	hl
+	call	_draw_reels
+	ld	hl, 2
+	push	hl
+	call	_gfx_SetColor
+	pop	hl
+	ld	hl, 54
+	push	hl
+	ld	hl, (ix - 38)
+	push	hl
+	ld	hl, 93
+	push	hl
+	ld	hl, (ix - 35)
+	push	hl
+	call	_gfx_FillRectangle
+	pop	hl
+	pop	hl
+	pop	hl
+	pop	hl
+	ld	hl, -27
+	push	hl
+	call	_gfx_SetColor
+	pop	hl
+	ld	hl, 54
+	push	hl
+	ld	hl, (ix - 38)
+	push	hl
+	ld	hl, 93
+	push	hl
+	ld	hl, (ix - 35)
+	push	hl
+	call	_gfx_Rectangle
+	pop	hl
+	pop	hl
+	pop	hl
+	pop	hl
+	ld	hl, 50
+	push	hl
+	ld	hl, (ix - 50)
+	push	hl
+	ld	hl, 95
+	push	hl
+	ld	hl, (ix - 56)
+	push	hl
+	call	_gfx_Rectangle
+	pop	hl
+	pop	hl
+	pop	hl
+	pop	hl
+	ld	hl, 3
+	push	hl
+	push	hl
+	call	_gfx_SetTextScale
+	pop	hl
+	pop	hl
+	ld	hl, 2
+	push	hl
+	call	_gfx_SetTextBGColor
+	pop	hl
+	ld	hl, 2
+	push	hl
+	call	_gfx_SetTextTransparentColor
+	pop	hl
+	ld	hl, (ix - 44)
+	ld	bc, 1
+	call	__iand
+	bit	0, l
+	ld	a, -27
+	ld	l, a
+	jr	z, BB3_40
+	ld	a, 1
+	ld	l, a
+BB3_40:
+	push	hl
+	call	_gfx_SetTextFGColor
+	pop	hl
+	ld	hl, 108
+	push	hl
+	ld	hl, (ix - 53)
+	push	hl
+	ld	hl, (ix - 47)
+	push	hl
+	call	_gfx_PrintStringXY
+	pop	hl
+	pop	hl
+	pop	hl
+	call	_gfx_SwapDraw
+	ld	hl, 150
+	push	hl
+	call	_delay
+	pop	hl
+	ld	bc, (ix - 44)
+	inc	bc
+	jp	BB3_37
+BB3_41:
+	ld	hl, 1
+	push	hl
+	push	hl
+	call	_gfx_SetTextScale
+	pop	hl
+	pop	hl
+	ld	hl, 2
+	push	hl
+	call	_gfx_SetTextFGColor
+	pop	hl
+	or	a, a
+	sbc	hl, hl
+	push	hl
+	call	_gfx_SetTextBGColor
+	pop	hl
+	or	a, a
+	sbc	hl, hl
+	push	hl
+	call	_gfx_SetTextTransparentColor
+BB3_42:
+	pop	hl
+	jp	BB3_7
+BB3_43:
+	call	_gfx_End
+	or	a, a
+	sbc	hl, hl
+	ld	sp, ix
+	pop	ix
+	ret
+	section	.text,"ax",@progbits
+
+	section	.text,"ax",@progbits
+	public	_init_gfx
+_init_gfx:
+	call	_gfx_Begin
+	or	a, a
+	sbc	hl, hl
+	push	hl
+	ld	hl, 72
+	push	hl
+	ld	hl, _sprite_palette
+	push	hl
+	call	_gfx_SetPalette
+	pop	hl
+	pop	hl
+	pop	hl
+	ld	hl, 1
+	push	hl
+	call	_gfx_SetDraw
+	pop	hl
+	ld	hl, (-851900)
+	ld	a, (-851897)
+	push	hl
+	call	_srand
+	pop	hl
+	ret
+	section	.text,"ax",@progbits
+
+	section	.text,"ax",@progbits
+	public	_load_assets
+_load_assets:
+	ld	hl, _slot_machine_bg_data
+	ld	de, _background_tile_data
+	ld	bc, _sym_sixseven_data
+	ld	iy, _sym_nugget_data
+	ld	(_bg_sprite), hl
+	ld	(_bg_tile_sprite), de
+	ld	(_symbol_sprites), bc
+	ld	(_symbol_sprites+15), iy
+	ld	hl, _sym_tung_data
+	ld	(_symbol_sprites+6), hl
+	ld	hl, _sym_skibidi_data
+	ld	(_symbol_sprites+9), hl
+	ld	hl, _sym_pork_data
+	ld	(_symbol_sprites+12), hl
+	ld	hl, _sym_taper_data
+	ld	(_symbol_sprites+3), hl
+	ret
+	section	.text,"ax",@progbits
+
+	section	.text,"ax",@progbits
+	public	_load_save
+_load_save:
+	ld	hl, -3
+	call	__frameset
+	ld	hl, _.str.6
+	ld	de, _.str.7
+	push	de
+	push	hl
+	call	_ti_Open
+	ld	e, a
+	pop	hl
+	pop	hl
+	or	a, a
+	jr	z, BB6_2
+	ld	iy, _g_data
+	ld	hl, 3
+	ld	bc, 1
+	push	de
+	push	bc
+	push	hl
+	push	iy
+	ld	(ix - 3), de
+	call	_ti_Read
+	pop	hl
+	pop	hl
+	pop	hl
+	pop	hl
+	ld	hl, (ix - 3)
+	push	hl
+	call	_ti_Close
+	ld	de, (ix - 3)
+	pop	hl
+BB6_2:
+	ld	a, e
+	or	a, a
+	jr	nz, BB6_4
+	ld	a, 0
+	jr	BB6_5
+BB6_4:
+	ld	a, -1
+BB6_5:
+	pop	hl
+	pop	ix
+	ret
+	section	.text,"ax",@progbits
+
+	section	.text,"ax",@progbits
+	public	_get_bet_input
+_get_bet_input:
+	ld	hl, -6
+	call	__frameset
+	ld	de, (_g_data)
+	ld	bc, (_get_bet_input.bet)
+	push	de
+	pop	hl
+	add	hl, bc
+	or	a, a
+	sbc	hl, bc
+	jr	z, BB7_2
+	push	de
+	pop	hl
+	or	a, a
+	sbc	hl, bc
+	jr	c, BB7_4
+BB7_2:
+	push	bc
+	pop	hl
+	add	hl, bc
+	or	a, a
+	sbc	hl, bc
+	jr	nz, BB7_5
+	ex	de, hl
+	add	hl, bc
+	or	a, a
+	sbc	hl, bc
+	ld	de, 5
+	jr	z, BB7_5
+BB7_4:
+	ld	(_get_bet_input.bet), de
+BB7_5:
+	ld	hl, 1
+	ld	(ix - 3), hl
+BB7_6:
+	ld	hl, (_g_data)
+	add	hl, bc
+	or	a, a
+	sbc	hl, bc
+	jp	nz, BB7_9
+	ld	hl, 10
+	ld	(_g_data), hl
+	ld	hl, 5
+	ld	(_get_bet_input.bet), hl
+	push	hl
+	or	a, a
+	sbc	hl, hl
+	push	hl
+	call	_draw_ui
+	pop	hl
+	pop	hl
+	ld	hl, 2
+	push	hl
+	call	_gfx_SetColor
+	pop	hl
+	ld	hl, 60
+	ex	de, hl
+	push	de
+	ld	hl, 200
+	push	hl
+	ld	hl, 90
+	push	hl
+	push	de
+	call	_gfx_FillRectangle
+	pop	hl
+	pop	hl
+	pop	hl
+	pop	hl
+	ld	hl, 1
+	push	hl
+	call	_gfx_SetColor
+	pop	hl
+	ld	hl, 60
+	push	hl
+	ld	de, 200
+	push	de
+	ld	de, 90
+	push	de
+	push	hl
+	call	_gfx_Rectangle
+	pop	hl
+	pop	hl
+	pop	hl
+	pop	hl
+	ld	hl, 2
+	push	hl
+	ld	hl, -27
+	push	hl
+	ld	hl, 100
+	push	hl
+	ld	hl, _.str.4
+	push	hl
+	call	_draw_text_centered
+	pop	hl
+	pop	hl
+	pop	hl
+	pop	hl
+	ld	hl, 2
+	push	hl
+	dec	hl
+	push	hl
+	ld	hl, 120
+	push	hl
+	ld	hl, _.str.5
+	push	hl
+	call	_draw_text_centered
+	pop	hl
+	pop	hl
+	pop	hl
+	pop	hl
+	call	_gfx_SwapDraw
+BB7_8:
+	call	_os_GetCSC
+	or	a, a
+	jr	z, BB7_8
+BB7_9:
+	ld	hl, (_get_bet_input.bet)
+	push	hl
+	push	hl
+	call	_draw_ui
+	pop	hl
+	pop	hl
+	call	_draw_reels
+	call	_gfx_SwapDraw
+	call	_kb_Scan
+	ld	hl, -720866
+	push	de
+	ld	e, (hl)
+	inc	hl
+	ld	d, (hl)
+	ld	l, e
+	ld	h, d
+	pop	de
+	ld	a, l
+	bit	3, a
+	jr	z, BB7_13
+	ld	iy, (_get_bet_input.bet)
+	ld	de, 5
+	add	iy, de
+	ld	de, (_g_data)
+	lea	hl, iy
+	or	a, a
+	sbc	hl, de
+	jr	c, BB7_12
+	push	de
+	pop	iy
+BB7_12:
+	ld	(_get_bet_input.bet), iy
+	ld	hl, 100
+	push	hl
+	call	_delay
+	pop	hl
+BB7_13:
+	ld	hl, -720866
+	push	de
+	ld	e, (hl)
+	inc	hl
+	ld	d, (hl)
+	ld	l, e
+	ld	h, d
+	pop	de
+	ld.sis	bc, 1
+	call	__sand
+	bit	0, l
+	jr	z, BB7_19
+	ld	iy, (_get_bet_input.bet)
+	lea	hl, iy
+	ld	de, 5
+	or	a, a
+	sbc	hl, de
+	jr	c, BB7_18
+	lea	hl, iy
+	ld	de, -5
+	add	hl, de
+	push	hl
+	pop	bc
+	lea	hl, iy
+	ld	de, 5
+	or	a, a
+	sbc	hl, de
+	ld	hl, 5
+	jr	z, BB7_17
+	push	bc
+	pop	hl
+BB7_17:
+	ld	(_get_bet_input.bet), hl
+BB7_18:
+	ld	hl, 100
+	push	hl
+	call	_delay
+	pop	hl
+BB7_19:
+	ld	iy, -720868
+	ld	l, (iy)
+	ld	h, (iy + 1)
+	ld.sis	bc, 1
+	call	__sand
+	bit	0, l
+	jr	nz, BB7_22
+	ld	l, (iy)
+	ld	h, (iy + 1)
+	ld	a, l
+	bit	6, a
+	jp	z, BB7_6
+	or	a, a
+	sbc	hl, hl
+	jr	BB7_34
+BB7_22:
+	ld	bc, (_get_bet_input.bet)
+	ld	de, (_g_data)
+	push	bc
+	pop	hl
+	or	a, a
+	sbc	hl, de
+	push	bc
+	pop	hl
+	jr	c, BB7_24
+	push	de
+	pop	hl
+BB7_24:
+	ld	(ix - 6), hl
+	add	hl, bc
+	or	a, a
+	sbc	hl, bc
+	ld	iyl, -1
+	ld	iyh, 0
+	ld	a, iyl
+	jr	z, BB7_26
+	ld	a, iyh
+BB7_26:
+	push	de
+	pop	hl
+	add	hl, bc
+	or	a, a
+	sbc	hl, bc
+	jr	nz, BB7_28
+	ld	iyl, iyh
+BB7_28:
+	and	a, iyl
+	bit	0, a
+	jr	nz, BB7_30
+	ld	hl, (ix - 6)
+	ld	(ix - 3), hl
+BB7_30:
+	ex	de, hl
+	or	a, a
+	sbc	hl, bc
+	jr	c, BB7_32
+	bit	0, a
+	jr	z, BB7_33
+BB7_32:
+	ld	hl, (ix - 3)
+	ld	(_get_bet_input.bet), hl
+	jr	BB7_34
+BB7_33:
+	ld	hl, (ix - 3)
+BB7_34:
+	ld	sp, ix
+	pop	ix
+	ret
+	section	.text,"ax",@progbits
+
+	section	.text,"ax",@progbits
+	public	_logic_spin_reels
+_logic_spin_reels:
+	ld	hl, -11
+	call	__frameset
+	ld	iy, _reels
+	or	a, a
+	sbc	hl, hl
+BB8_1:
+	ld	bc, 36
+	push	hl
+	pop	de
+	or	a, a
+	sbc	hl, bc
+	jp	z, BB8_21
+	push	de
+	pop	bc
+	add	iy, bc
+	bit	0, (iy + 8)
+	ex	de, hl
+	ld	(ix - 3), hl
+	jp	nz, BB8_11
+	ld	(ix - 10), iy
+	ex	de, hl
+	ld	iy, _reels
+	add	iy, de
+	ld	hl, (iy + 9)
+	lea	de, iy
+	ld	bc, 40
+	call	__imulu
+	push	hl
+	pop	bc
+	push	bc
+	pop	iy
+	add	iy, iy
+	sbc	hl, hl
+	ld	a, l
+	call	__ltof
+	ld	(ix - 6), bc
+	ld	(ix - 7), a
+	push	de
+	pop	iy
+	ld	hl, (iy)
+	ld	a, (iy + 3)
+	ld	de, 67
+	push	de
+	ld	de, 7340032
+	push	de
+	ld	e, a
+	push	de
+	push	hl
+	call	_fmod
+	pop	bc
+	pop	bc
+	pop	bc
+	pop	bc
+	ld	bc, (ix - 6)
+	ld	a, (ix - 7)
+	call	__fsub
+	push	bc
+	pop	iy
+	ld	e, a
+	lea	hl, iy
+	ld	bc, 0
+	xor	a, a
+	call	__fcmp
+	ld	d, 1
+	jp	m, BB8_5
+	ld	d, 0
+BB8_5:
+	lea	bc, iy
+	ld	(ix - 11), e
+	ld	a, e
+	ld	hl, 7340032
+	ld	e, 67
+	call	__fadd
+	push	bc
+	pop	hl
+	ld	e, a
+	bit	0, d
+	jr	nz, BB8_7
+	lea	hl, iy
+BB8_7:
+	bit	0, d
+	ld	bc, 0
+	jr	nz, BB8_9
+	ld	e, (ix - 11)
+BB8_9:
+	ld	d, 64
+	ld	a, d
+	call	__fcmp
+	ld	iy, (ix - 10)
+	jp	p, BB8_12
+	ld	hl, (ix - 3)
+	push	hl
+	pop	de
+	ld	iy, _reels
+	add	iy, de
+	ld	de, 0
+	ld	(iy + 4), de
+	ld	(iy + 7), d
+	ld	bc, (ix - 6)
+	ld	a, (ix - 7)
+	jr	BB8_20
+BB8_11:
+	ex	de, hl
+	ld	iy, _reels
+	add	iy, de
+	ld	bc, (iy + 4)
+	ld	hl, (iy)
+	ld	a, (iy + 7)
+	jr	BB8_19
+BB8_12:
+	push	hl
+	pop	bc
+	ld	a, e
+	ld	hl, -5033165
+	ld	e, 62
+	call	__fmul
+	push	bc
+	pop	hl
+	ld	e, a
+	ld	bc, 0
+	ld	a, d
+	call	__fcmp
+	ld	a, 1
+	jp	m, BB8_14
+	ld	a, 0
+BB8_14:
+	bit	0, a
+	ld	bc, 0
+	jr	nz, BB8_16
+	push	hl
+	pop	bc
+BB8_16:
+	bit	0, a
+	jr	nz, BB8_18
+	ld	d, e
+BB8_18:
+	ld	hl, (iy)
+	ld	a, d
+BB8_19:
+	ld	e, (iy + 3)
+	call	__fadd
+	ld	hl, (ix - 3)
+BB8_20:
+	push	hl
+	pop	de
+	ld	iy, _reels
+	add	iy, de
+	ld	(iy), bc
+	ld	(iy + 3), a
+	ld	iy, _reels
+	ld	de, 12
+	add	hl, de
+	jp	BB8_1
+BB8_21:
+	ld	sp, ix
+	pop	ix
+	ret
+	section	.text,"ax",@progbits
+
+	section	.text,"ax",@progbits
+	public	_draw_ui
+_draw_ui:
+	ld	hl, -46
+	call	__frameset
+	ld	de, 5
+	ld	hl, (_bg_tile_sprite)
+	add	hl, bc
+	or	a, a
+	sbc	hl, bc
+	jp	nz, BB9_7
+	push	de
+	call	_gfx_FillScreen
+	pop	hl
+BB9_2:
+	lea	hl, ix - 40
+	ld	(ix - 43), hl
+	ld	hl, (_bg_sprite)
+	add	hl, bc
+	or	a, a
+	sbc	hl, bc
+	jr	z, BB9_4
+	ld	de, 80
+	ld	bc, 0
+	push	bc
+	push	de
+	push	hl
+	call	_gfx_TransparentSprite
+	pop	hl
+	pop	hl
+	pop	hl
+BB9_4:
+	ld	hl, 2
+	push	hl
+	push	hl
+	call	_gfx_SetTextScale
+	pop	hl
+	pop	hl
+	ld	hl, 2
+	push	hl
+	call	_gfx_SetTextFGColor
+	pop	hl
+	or	a, a
+	sbc	hl, hl
+	push	hl
+	call	_gfx_SetTextBGColor
+	pop	hl
+	or	a, a
+	sbc	hl, hl
+	push	hl
+	call	_gfx_SetTextTransparentColor
+	pop	hl
+	ld	hl, _.str.1
+	push	hl
+	call	_gfx_GetStringWidth
+	push	hl
+	pop	de
+	pop	hl
+	ld	hl, 315
+	or	a, a
+	sbc	hl, de
+	ld	de, 5
+	push	de
+	push	hl
+	ld	hl, _.str.1
+	push	hl
+	call	_gfx_PrintStringXY
+	pop	hl
+	pop	hl
+	pop	hl
+	ld	hl, (_g_data)
+	push	hl
+	ld	hl, _.str.2
+	push	hl
+	ld	hl, (ix - 43)
+	push	hl
+	call	_sprintf
+	pop	hl
+	pop	hl
+	pop	hl
+	ld	hl, (ix - 43)
+	push	hl
+	call	_gfx_GetStringWidth
+	push	hl
+	pop	de
+	pop	hl
+	ld	hl, 315
+	or	a, a
+	sbc	hl, de
+	ld	de, 25
+	push	de
+	push	hl
+	ld	hl, (ix - 43)
+	push	hl
+	call	_gfx_PrintStringXY
+	pop	hl
+	pop	hl
+	pop	hl
+	ld	hl, (ix + 6)
+	add	hl, bc
+	or	a, a
+	sbc	hl, bc
+	jr	z, BB9_6
+	ld	de, _.str.3
+	ld	bc, 5
+	push	bc
+	push	bc
+	push	de
+	call	_gfx_PrintStringXY
+	pop	hl
+	pop	hl
+	pop	hl
+	ld	hl, (ix + 6)
+	push	hl
+	ld	hl, _.str.2
+	push	hl
+	ld	hl, (ix - 43)
+	push	hl
+	call	_sprintf
+	pop	hl
+	pop	hl
+	pop	hl
+	ld	hl, 25
+	push	hl
+	ld	hl, 5
+	push	hl
+	ld	hl, (ix - 43)
+	push	hl
+	call	_gfx_PrintStringXY
+	pop	hl
+	pop	hl
+	pop	hl
+BB9_6:
+	ld	hl, 1
+	push	hl
+	push	hl
+	call	_gfx_SetTextScale
+	pop	hl
+	pop	hl
+	ld	hl, 2
+	push	hl
+	call	_gfx_SetTextFGColor
+	pop	hl
+	or	a, a
+	sbc	hl, hl
+	push	hl
+	call	_gfx_SetTextBGColor
+	pop	hl
+	or	a, a
+	sbc	hl, hl
+	push	hl
+	call	_gfx_SetTextTransparentColor
+	ld	sp, ix
+	pop	ix
+	ret
+BB9_7:
+	ld	iy, 32
+	ld	de, 240
+	or	a, a
+	sbc	hl, hl
+BB9_8:
+	ld	(ix - 43), hl
+	or	a, a
+	sbc	hl, de
+	jp	nc, BB9_2
+	or	a, a
+	sbc	hl, hl
+BB9_10:
+	push	hl
+	pop	bc
+	ld	de, 320
+	or	a, a
+	sbc	hl, de
+	jr	nc, BB9_12
+	ld	hl, (_bg_tile_scaled)
+	ld	de, (ix - 43)
+	push	de
+	ld	(ix - 46), bc
+	push	bc
+	push	hl
+	call	_gfx_Sprite
+	ld	de, 32
+	pop	hl
+	pop	hl
+	pop	hl
+	ld	hl, (ix - 46)
+	push	de
+	pop	iy
+	add	hl, de
+	jr	BB9_10
+BB9_12:
+	lea	de, iy
+	ld	hl, (ix - 43)
+	add	hl, de
+	ld	de, 240
+	jr	BB9_8
+	section	.text,"ax",@progbits
+
+	section	.text,"ax",@progbits
+	public	_draw_reels
+_draw_reels:
+	ld	hl, -24
+	call	__frameset
+	ld	de, 37
+	ld	bc, 231
+	ld	hl, 147
+	ld	iy, _reel_strips
+	ld	(ix - 9), iy
+	push	hl
+	push	bc
+	push	de
+	ld	hl, 88
+	push	hl
+	call	_gfx_SetClipRegion
+	pop	hl
+	pop	hl
+	pop	hl
+	pop	hl
+	ld	de, 3
+	ld	bc, 0
+BB10_1:
+	push	bc
+	pop	hl
+	or	a, a
+	sbc	hl, de
+	jp	z, BB10_11
+	push	bc
+	pop	hl
+	push	bc
+	pop	iy
+	ld	bc, 47
+	call	__imulu
+	ld	de, 96
+	add	hl, de
+	ld	(ix - 18), hl
+	ld	(ix - 15), iy
+	lea	hl, iy
+	ld	bc, 12
+	call	__imulu
+	push	hl
+	pop	de
+	ld	iy, _reels
+	add	iy, de
+	ld	hl, (iy)
+	ld	a, (iy + 3)
+	ld	de, 67
+	push	de
+	ld	de, 7340032
+	push	de
+	ld	e, a
+	push	de
+	push	hl
+	call	_fmod
+	push	hl
+	pop	bc
+	ld	a, e
+	pop	hl
+	pop	hl
+	pop	hl
+	pop	hl
+	call	__ftol
+	ld	hl, -174
+	or	a, a
+	sbc	hl, bc
+	ld	(ix - 3), hl
+	ld	bc, -1
+BB10_3:
+	push	bc
+	pop	hl
+	ld	de, 2
+	or	a, a
+	sbc	hl, de
+	jp	z, BB10_10
+	or	a, a
+	sbc	hl, hl
+	ld	de, (ix - 3)
+	ld	(ix - 6), de
+BB10_5:
+	ld	(ix - 12), hl
+	ld	de, 18
+	or	a, a
+	sbc	hl, de
+	jr	z, BB10_9
+	ld	iy, (ix - 6)
+	lea	hl, iy
+	ld	de, 6
+	add	hl, de
+	ld	(ix - 21), hl
+	lea	hl, iy
+	ld	de, 141
+	or	a, a
+	sbc	hl, de
+	jr	nc, BB10_8
+	ld	de, (ix - 12)
+	ld	iy, (ix - 9)
+	add	iy, de
+	ld	hl, (iy)
+	ld	(ix - 24), bc
+	ld	bc, 3
+	call	__imulu
+	push	hl
+	pop	de
+	ld	hl, _symbol_sprites
+	add	hl, de
+	ld	hl, (hl)
+	ld	de, (ix - 21)
+	push	de
+	ld	de, (ix - 18)
+	push	de
+	push	hl
+	call	_draw_scaled_sprite
+	ld	bc, (ix - 24)
+	pop	hl
+	pop	hl
+	pop	hl
+BB10_8:
+	ld	de, 40
+	ld	hl, (ix - 6)
+	add	hl, de
+	ld	(ix - 6), hl
+	ld	de, 3
+	ld	hl, (ix - 12)
+	add	hl, de
+	jr	BB10_5
+BB10_9:
+	inc	bc
+	ld	de, 240
+	ld	hl, (ix - 3)
+	add	hl, de
+	ld	(ix - 3), hl
+	jp	BB10_3
+BB10_10:
+	ld	bc, (ix - 15)
+	inc	bc
+	ld	iy, (ix - 9)
+	lea	iy, iy + 18
+	ld	(ix - 9), iy
+	ld	de, 3
+	jp	BB10_1
+BB10_11:
+	ld	hl, 240
+	push	hl
+	ld	hl, 320
+	push	hl
+	or	a, a
+	sbc	hl, hl
+	push	hl
+	push	hl
+	call	_gfx_SetClipRegion
+	ld	sp, ix
+	pop	ix
+	ret
+	section	.text,"ax",@progbits
+
+	section	.text,"ax",@progbits
+	public	_check_win
+_check_win:
+	ld	hl, -6
+	call	__frameset
+	ld	iy, _reel_strips
+	ld	hl, (_reels+9)
+	ld	bc, 3
+	call	__imulu
+	push	hl
+	pop	de
+	add	iy, de
+	ld	hl, (iy)
+	ld	(ix - 3), hl
+	ld	hl, (_reels+21)
+	ld	iy, _reel_strips+18
+	call	__imulu
+	push	hl
+	pop	de
+	add	iy, de
+	ld	de, (iy)
+	ld	hl, (_reels+33)
+	ld	iy, _reel_strips+36
+	call	__imulu
+	push	hl
+	pop	bc
+	add	iy, bc
+	ld	bc, (iy)
+	ld	iy, (ix - 3)
+	lea	hl, iy
+	or	a, a
+	sbc	hl, de
+	jr	nz, BB11_4
+	push	de
+	pop	hl
+	or	a, a
+	sbc	hl, bc
+	jr	nz, BB11_4
+	ld	de, 1
+	lea	hl, iy
+	or	a, a
+	sbc	hl, de
+	jr	z, BB11_12
+	ld	bc, 10
+	jr	BB11_13
+BB11_4:
+	ld	(ix - 6), bc
+	lea	hl, iy
+	or	a, a
+	sbc	hl, de
+	jr	z, BB11_7
+	push	de
+	pop	hl
+	ld	bc, (ix - 6)
+	or	a, a
+	sbc	hl, bc
+	jr	z, BB11_7
+	lea	hl, iy
+	ld	bc, (ix - 6)
+	or	a, a
+	sbc	hl, bc
+	ld	bc, 0
+	jr	nz, BB11_15
+BB11_7:
+	ld	bc, 1
+	push	de
+	pop	hl
+	or	a, a
+	sbc	hl, bc
+	jr	z, BB11_9
+	ld	bc, 1
+	jr	BB11_10
+BB11_9:
+	ld	bc, 2
+BB11_10:
+	ex	de, hl
+	add	hl, bc
+	or	a, a
+	sbc	hl, bc
+	jr	nz, BB11_15
+	ld	bc, 3
+	jr	BB11_15
+BB11_12:
+	ld	bc, 25
+BB11_13:
+	lea	hl, iy
+	add	hl, bc
+	or	a, a
+	sbc	hl, bc
+	jr	nz, BB11_15
+	ld	bc, 50
+BB11_15:
+	push	bc
+	pop	hl
+	ld	sp, ix
+	pop	ix
+	ret
+	section	.text,"ax",@progbits
+
+	section	.text,"ax",@progbits
+	public	_save_game
+_save_game:
+	ld	hl, -3
+	call	__frameset
+	ld	hl, _.str.6
+	ld	de, _.str.8
+	push	de
+	push	hl
+	call	_ti_Open
+	ld	e, a
+	pop	hl
+	pop	hl
+	or	a, a
+	jr	z, BB12_2
+	ld	iy, _g_data
+	ld	hl, 3
+	ld	bc, 1
+	push	de
+	push	bc
+	push	hl
+	push	iy
+	ld	(ix - 3), de
+	call	_ti_Write
+	pop	hl
+	pop	hl
+	pop	hl
+	pop	hl
+	ld	hl, (ix - 3)
+	push	hl
+	call	_ti_Close
+	pop	hl
+BB12_2:
+	pop	hl
+	pop	ix
+	ret
+	section	.text,"ax",@progbits
+
+	section	.text,"ax",@progbits
+	public	_draw_text_centered
+_draw_text_centered:
+	ld	hl, -7
+	call	__frameset
+	ld	hl, (ix + 6)
+	ld	(ix - 3), hl
+	ld	hl, (ix + 9)
+	ld	(ix - 7), hl
+	ld	a, (ix + 15)
+	ld	(ix - 4), a
+	ld	l, (ix + 12)
+	push	hl
+	call	_gfx_SetTextFGColor
+	pop	hl
+	ld	l, (ix - 4)
+	push	hl
+	call	_gfx_SetTextBGColor
+	pop	hl
+	ld	a, (ix - 4)
+	cp	a, 2
+	jr	z, BB13_2
+	ld	l, 0
+	jr	BB13_3
+BB13_2:
+	ld	l, 2
+BB13_3:
+	push	hl
+	call	_gfx_SetTextTransparentColor
+	pop	hl
+	ld	hl, (ix - 3)
+	push	hl
+	call	_gfx_GetStringWidth
+	push	hl
+	pop	de
+	pop	hl
+	ld	hl, 320
+	or	a, a
+	sbc	hl, de
+	ld	c, 1
+	call	__ishru
+	ld	de, (ix - 3)
+	ld	(ix + 6), de
+	ld	(ix + 9), hl
+	ld	hl, (ix - 7)
+	ld	(ix + 12), hl
+	ld	sp, ix
+	pop	ix
+	jp	_gfx_PrintStringXY
+	section	.text,"ax",@progbits
+
+	section	.rodata,"a",@progbits
+	public	_bets
+_bets:
+	dl	5
+	dl	10
+	dl	25
+	dl	50
+	dl	100
+
+	section	.bss,"aw",@nobits
+	public	_bg_tile_scaled_data
+_bg_tile_scaled_data:
+	rb	1026
+
+	section	.data,"aw",@progbits
+	public	_bg_tile_scaled
+_bg_tile_scaled:
+	dl	_bg_tile_scaled_data
+
+	section	.bss,"aw",@nobits
+	public	_bg_tile_sprite
+_bg_tile_sprite:
+	rb	3
+
+	section	.rodata,"a",@progbits
+	public	_initial_reel_strip
+_initial_reel_strip:
+	dl	0
+	dl	1
+	dl	2
+	dl	3
+	dl	4
+	dl	5
+
+	section	.bss,"aw",@nobits
+	public	_reel_strips
+_reel_strips:
+	rb	54
+
+	section	.bss,"aw",@nobits
+	public	_g_data
+_g_data:
+	rb	3
+
+	section	.bss,"aw",@nobits
+	public	_reels
+_reels:
+	rb	36
+
+	section	.rodata,"a",@progbits
+	private	_.str
+_.str:
+	db	"WIN: $%u!", 0
+
+	section	.bss,"aw",@nobits
+	public	_bg_sprite
+_bg_sprite:
+	rb	3
+
+	section	.rodata,"a",@progbits
+	private	_.str.1
+_.str.1:
+	db	"Cash:", 0
+
+	section	.rodata,"a",@progbits
+	private	_.str.2
+_.str.2:
+	db	"$%u", 0
+
+	section	.rodata,"a",@progbits
+	private	_.str.3
+_.str.3:
+	db	"Bet:", 0
+
+	section	.bss,"aw",@nobits
+	public	_symbol_sprites
+_symbol_sprites:
+	rb	18
+
+	section	.data,"aw",@progbits
+	private	_get_bet_input.bet
+_get_bet_input.bet:
+	dl	5
+
+	section	.rodata,"a",@progbits
+	private	_.str.4
+_.str.4:
+	db	"BANKRUPT!", 0
+
+	section	.rodata,"a",@progbits
+	private	_.str.5
+_.str.5:
+	db	"Here's $10 on the house.", 0
+
+	section	.data,"aw",@progbits
+	public	_sprite_palette
+_sprite_palette:
+	db	"|ˇˇ", 0, 0, 0, 0, "5â", 13, "ççÌê6SUëñWxôù‚∞BH»MìN˜ﬁ&‚è‚cd)eçjZÎ≠Ì{Ô˜Ús1sºs›wÄ~9"
+
+	section	.data,"aw",@progbits
+	public	_slot_machine_bg_data
+_slot_machine_bg_data:
+	db	"†""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, "", 26, 26, 26, "", 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, "", 26, "", 26, 26, 26, "", 26, "", 26, 26, "", 26, "", 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, "", 26, 26, "", 26, 26, "", 26, 26, "", 26, 26, 26, 26, "", 26, "", 26, 26, 26, 26, 26, 26, "", 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, "", 26, "", 26, "", 26, 26, 26, 26, 26, "", 26, "", 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, "", 26, "", 26, "", 26, 26, 26, "", 26, 26, 26, 26, "                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     !                                                                                      !    !          !  !   !        !                             !                    !                     !                        !      !       ! !   ! !! !!! !!   ! !      !!  !   !     ! !!!  ! !      !    ! !       ! !!   !!!!   !!    !! !!! ! !!   !!!!! !!!!  !!  !  !  ! !! !!!!  !!   ! !!!!!!!! !!  !! !!  !!!!!!!!!!!! ! ! !!!!!!!!!!! !  !!!!!  ! !!!!!  !! !!!  !!  !  ! !!!!! !!!!!! ! !!  ! !!!   ! !!!!!!!!!!!!!!!!!! !!! !!!! ! !!!!!!! !!!!!!!! !!!!!!! !!!!!!!!!!! !!!!!!!!!!!!!!!!!!!!!!! !!!! !!! !!!!!!!!!!!! !!!!!!!!!!!! !!!!!!!!!!! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! !!!!!!!!!!!!!!!!!!!!!!!! !!!!!!!!!!!!!!!!!!!!!!!!!!!!! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! !!!!!! !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!  !!!!!!!! !!!!!!!!!!!! !!!!!!!!!!!!!!!!!!!! !!!!!!!!!!!!!!!! !!!! ! !   !!! !!! !! !!!!!  !!   !!  !!!!! !  !!!!!! !!!! ! !!!!!!!!!!!!!!! ! !! !  !   !! ! !!!! !!  ! !!! !! !!    ! !!!!!!! !! !!!! !!!!  !   !  ! !   !! !!!!!         !  !          ! !!! !   !  !   ! !   ! !!  !!  !!      !   !  !!! ! !! ! !!  !   !   !   !!!! !  !    ! !  !!             !         ! !   !!                          !       !   !              !             !             !   !                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       ", 26, "", 26, "", 26, "", 26, 26, "", 26, 26, 26, "", 26, "", 26, "", 26, "", 26, 26, "", 26, "", 26, 26, "", 26, "", 26, "", 26, 26, "", 26, "", 26, 26, "", 26, "", 26, "", 26, "", 26, "", 26, "", 26, "", 26, "", 26, "", 26, "", 26, 26, 26, 26, "", 26, "", 26, "", 26, "", 26, "", 26, 26, "", 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, 26, "", 10, 10, "", 10, 10, 10, 10, "", 10, 10, 10, 10, "", 10, "", 10, 10, 10, 10, 10, 10, "", 10, "", 10, 10, 10, 10, 10, 10, "", 10, 10, "", 10, 10, 10, 10, 10, 10, "", 10, 10, "", 10, "", 10, 10, "", 10, 10, 10, 10, "", 10, 10, 10, "", 10, 10, 10, 10, 10, "", 10, "", 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, "", 10, 10, "", 10, "", 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, "", 10, 10, "", 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, "", 10, "", 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, "", 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, "", 10, "", 10, 10, "", 10, 10, 10, 10, 10, "", 10, "", 10, "", 10, ""
+
+	section	.data,"aw",@progbits
+	public	_background_tile_data
+_background_tile_data:
+	db	"", 13, "", 13, 13, 13, 13, "	", 13, "	", 13, 13, "	", 13, 13, 13, "", 13, 13, "", 13, 13, 13, "", 13, 13, "", 13, "	", 13, 13, 13, "", 13, "", 13, "	", 13, 13, 13, 13, 13, "		", 13, "", 13, "", 13, 13, 13, "", 13, "", 13, "", 13, "", 13, "", 13, "", 13, "", 13, "", 13, 13, "", 13, "", 13, 13, 13, "", 13, "", 13, 13, "	", 13, "	", 13, "	", 13, 13, 13, 13, 13, "	", 13, 13, 13, "", 13, 13, 13, 13, 13, 13, "", 13, 13, 13, 13, 13, 13, "", 13, 13, 13, 13, 13, "", 13, 13, 13, 13, 13, 13, "	", 13, "", 13, 13, "", 13, 13, 13, 13, "		", 13, 13, 13, "", 13, "", 13, 13, 13, "", 13, 13, "", 13, 13, "	", 13, "		", 13, 13, 13, 13, 13, "	", 13, 13, 13, 13, 13, 13, "", 13, "", 13, "", 13, 13, "", 13, "	", 13, "	", 13, "", 13, "", 13, 13, 13, "		", 13, "", 13, 13, 13, 13, "	", 13, 13, 13, ""
+
+	section	.data,"aw",@progbits
+	public	_sym_sixseven_data
+_sym_sixseven_data:
+	db	"", 0, 0, 0, "", 0, 0, 0, 0, 0, "", 0, 0, 0, "", 0, 0, "", 0, "", 0, "", 0, "", 0, "", 0, "", 0, 0, "", 0, 0, 0, "", 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, "", 0, 0, 0, "", 0, 0, 0, "", 0, 0
+
+	section	.data,"aw",@progbits
+	public	_sym_nugget_data
+_sym_nugget_data:
+	db	"", 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, "", 0, 0, 0, 0, "", 0, 0, 0, 0, "", 0, 0, 0, 0, "", 0, 0, 0, 0, "", 0, 0, 0, 0, "", 0, 0, 0, 0, "", 0, 0, 0, 0, "", 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, "", 0, 0, 0
+
+	section	.data,"aw",@progbits
+	public	_sym_tung_data
+_sym_tung_data:
+	db	"", 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, "", 0, 0, "", 0, "", 0, "", 0, "", 0, "", 0, "", 0, "", 0, "", 0, "", 0, "", 0, "", 0, 0, "", 0, "", 0, "", 0, 0, 0, 0, "", 0, "", 0, "", 0, 0, 0, 0, "", 0, 0, "", 0, "", 0, 0, 0, 0, "", 0, 0, "", 0, "", 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 0, "", 0, 0, 0, 0
+
+	section	.data,"aw",@progbits
+	public	_sym_skibidi_data
+_sym_skibidi_data:
+	db	"", 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, "!!!!", 0, 0, 0, 0, 0, "!!!!", 0, 0, 0, 0, 0, "!!!!!!", 0, 0, 0, 0, 0, "!!!!!!", 0, 0, 0, 0, 0, "!!!!!!", 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0
+
+	section	.data,"aw",@progbits
+	public	_sym_pork_data
+_sym_pork_data:
+	db	"", 0, "", 0, 0, 0, 0, 0, 0, "", 0, 0, 0, "", 0, 0, "######", 0, 0, 0, "#########", 0, 0, 0, 0, 0, "###", 0, 0, 0, 0, 0, "#########", 0, 0, 0, 0, 0, "######", 0, 0, 0, 0, 0, "#####", 0, 0, 0, 0, 0, 0, "########", 0, 0, 0, 0, 0, 0, 0, "#######", 0, 0, 0, 0, 0, 0, 0, 0, "#####", 0, 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, "", 0, 0, 0, "", 0, "", 0, "", 0
+
+	section	.data,"aw",@progbits
+	public	_sym_taper_data
+_sym_taper_data:
+	db	"", 0, 0, "", 0, 0, 0, 0, "", 0, 0, "", 0, 0, "", 0, 0, "", 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, ""
+
+	section	.rodata,"a",@progbits
+	private	_.str.6
+_.str.6:
+	db	"SLOTSDAT", 0
+
+	section	.rodata,"a",@progbits
+	private	_.str.7
+_.str.7:
+	db	"r", 0
+
+	section	.rodata,"a",@progbits
+	private	_.str.8
+_.str.8:
+	db	"w", 0
+
+	ident	"clang version 15.0.7 (https://github.com/CE-Programming/llvm-project 263e6374ab7ac991c1bac4ed5ae7821242623cc5)"
+	ident	"clang version 15.0.7 (https://github.com/CE-Programming/llvm-project 263e6374ab7ac991c1bac4ed5ae7821242623cc5)"
+	ident	"clang version 15.0.7 (https://github.com/CE-Programming/llvm-project 263e6374ab7ac991c1bac4ed5ae7821242623cc5)"
+	ident	"clang version 15.0.7 (https://github.com/CE-Programming/llvm-project 263e6374ab7ac991c1bac4ed5ae7821242623cc5)"
+	ident	"clang version 15.0.7 (https://github.com/CE-Programming/llvm-project 263e6374ab7ac991c1bac4ed5ae7821242623cc5)"
+	ident	"clang version 15.0.7 (https://github.com/CE-Programming/llvm-project 263e6374ab7ac991c1bac4ed5ae7821242623cc5)"
+	ident	"clang version 15.0.7 (https://github.com/CE-Programming/llvm-project 263e6374ab7ac991c1bac4ed5ae7821242623cc5)"
+	ident	"clang version 15.0.7 (https://github.com/CE-Programming/llvm-project 263e6374ab7ac991c1bac4ed5ae7821242623cc5)"
+	ident	"clang version 15.0.7 (https://github.com/CE-Programming/llvm-project 263e6374ab7ac991c1bac4ed5ae7821242623cc5)"
+	ident	"clang version 15.0.7 (https://github.com/CE-Programming/llvm-project 263e6374ab7ac991c1bac4ed5ae7821242623cc5)"
+	extern	_gfx_SetTextTransparentColor
+	extern	__Unwind_SjLj_Register
+	extern	_srand
+	extern	_gfx_SetTextFGColor
+	extern	_gfx_Begin
+	extern	__lcmpzero
+	extern	__fadd
+	extern	_gfx_SetPalette
+	extern	_rand
+	extern	_ti_Close
+	extern	__sand
+	extern	__ishl
+	extern	__ladd
+	extern	__ftol
+	extern	_ti_Read
+	extern	__idivs
+	extern	__idivu
+	extern	__setflag
+	extern	__iand
+	extern	_gfx_FillRectangle
+	extern	_ti_Open
+	extern	__ltof
+	extern	_gfx_Sprite
+	extern	_gfx_SetClipRegion
+	extern	_delay
+	extern	_os_GetCSC
+	extern	__fsub
+	extern	_fmod
+	extern	__frameset
+	extern	__lremu
+	extern	_sprintf
+	extern	_gfx_SetTextBGColor
+	extern	__lmulu
+	extern	_kb_Scan
+	extern	_gfx_GetStringWidth
+	extern	_ti_Write
+	extern	_gfx_SwapDraw
+	extern	__fmul
+	extern	__ishru
+	extern	_gfx_SetDraw
+	extern	_gfx_FillScreen
+	extern	__Unwind_SjLj_Unregister
+	extern	__irems
+	extern	__imulu
+	extern	_gfx_SetColor
+	extern	_gfx_Rectangle
+	extern	__land
+	extern	_gfx_PrintStringXY
+	extern	_gfx_End
+	extern	__fcmp
+	extern	_gfx_TransparentSprite
+	extern	_gfx_SetTextScale
