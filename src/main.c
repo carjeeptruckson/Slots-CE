@@ -136,11 +136,10 @@ bool load_save(void);
 void save_game(void);
 void draw_ui(unsigned int current_bet, int win_amount);
 void draw_reels(void);
-void draw_reels(void);
 // void draw_scaled_sprite(gfx_sprite_t *sprite, int x, int y);
 void logic_spin_reels(void);
-void logic_spin_reels(void);
 int check_win(void);
+void draw_stippled_bar(int x, int y, int width, int height);
 void draw_text_centered(const char *str, int y, uint8_t fg, uint8_t bg);
 unsigned int get_bet_input(void);
 
@@ -419,8 +418,71 @@ void draw_reels(void) {
       }
     }
   }
+
   gfx_SetClipRegion(0, 0, 320, 240);
-  // Red horizontal line removed
+
+  // Draw overlays (stippled black for semi-transparency)
+  // X range: 88 to 88+143 = 231
+  int ox = 88;
+  int ow = 143;
+
+  // Top:
+  // 1px Solid Black line at REEL_Y_START (37)
+  gfx_SetColor(COL_BLACK);
+  gfx_HorizLine(ox, REEL_Y_START, ow);
+
+  // 4px Stippled (38-41)
+  draw_stippled_bar(ox, REEL_Y_START + 1, ow, 4);
+
+  // 2px gap (42-43)
+
+  // 2px Stippled (44-45)
+  draw_stippled_bar(ox, REEL_Y_START + 7, ow, 2);
+
+  // 1px gap (46)
+
+  // 2px Stippled (47-48)
+  draw_stippled_bar(ox, REEL_Y_START + 10, ow, 2);
+
+  // Bottom: Mirrored logic
+  // Bottom edge Y = 37 + 110 = 147.
+  int bot_y = REEL_Y_START + REEL_WINDOW_H; // 147
+
+  // 1px Solid Black line at very bottom (146) - wait, window is y_start to
+  // y_start+h. if height is 110, pixels are 0..109 relative. 37..146 inclusive.
+  // So line 147 is outside. Line 146 is the last line.
+  gfx_HorizLine(ox, bot_y - 1, ow);
+
+  // 4px Stippled above it (142-145)
+  draw_stippled_bar(ox, bot_y - 5, ow, 4);
+
+  // 2px gap (140-141)
+
+  // 2px Stippled (138-139)
+  draw_stippled_bar(ox, bot_y - 9, ow, 2);
+
+  // 1px gap (137)
+
+  // 2px Stippled (135-136)
+  draw_stippled_bar(ox, bot_y - 12, ow, 2);
+}
+
+void draw_stippled_bar(int x, int y, int width, int height) {
+  uint8_t *buffer = (uint8_t *)gfx_vbuffer;
+  for (int r = 0; r < height; r++) {
+    int draw_y = y + r;
+    if (draw_y < 0 || draw_y >= 240)
+      continue;
+    for (int c = 0; c < width; c++) {
+      int draw_x = x + c;
+      if (draw_x < 0 || draw_x >= 320)
+        continue;
+
+      if ((draw_y + draw_x) % 2 == 0) { // Checkerboard
+        buffer[draw_y * 320 + draw_x] = COL_BLACK;
+      }
+    }
+  }
 }
 
 unsigned int get_bet_input(void) {
