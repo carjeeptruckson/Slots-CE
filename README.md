@@ -3,7 +3,7 @@
 A graphical slot machine game for the TI-84 Plus CE calculator, featuring smooth animations, a betting system, and persistent save data.
 
 ## Screenshot
-![Alt text](slot-screenshot.png)
+![Screenshot](screenshot.png)
 
 ## Features
 
