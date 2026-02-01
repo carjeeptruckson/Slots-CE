@@ -27,7 +27,7 @@
 #define COL_BLUE 5
 #define COL_GREEN 142
 #define COL_RED 170
-#define COL_GOLD 229
+#define COL_GOLD 222
 
 const unsigned int bets[] = {5, 10, 25, 50, 100};
 #define NUM_BETS (sizeof(bets) / sizeof(bets[0]))
