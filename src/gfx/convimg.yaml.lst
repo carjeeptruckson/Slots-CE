@@ -16,4 +16,8 @@ sym_lemon.h
 sym_lemon.c
 sym_diamond.h
 sym_diamond.c
+light_lit.h
+light_lit.c
+light_unlit.h
+light_unlit.c
 gfx.h

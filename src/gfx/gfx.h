@@ -15,6 +15,8 @@ extern "C" {
 #include "sym_bar.h"
 #include "sym_lemon.h"
 #include "sym_diamond.h"
+#include "light_lit.h"
+#include "light_unlit.h"
 
 #ifdef __cplusplus
 }

@@ -20,6 +20,8 @@ converts:
       - "sym_bar.png"
       - "sym_lemon.png"
       - "sym_diamond.png"
+      - "light_lit.png"
+      - "light_unlit.png"
 
 outputs:
   - type: c

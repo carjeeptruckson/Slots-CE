@@ -27,7 +27,7 @@
 #define COL_BLUE 5
 #define COL_GREEN 142
 #define COL_RED 170
-#define COL_GOLD 222
+#define COL_GOLD 225
 
 const unsigned int bets[] = {5, 10, 25, 50, 100};
 #define NUM_BETS (sizeof(bets) / sizeof(bets[0]))
@@ -64,6 +64,18 @@ gfx_sprite_t *bg_tile_sprite;
 uint8_t bg_tile_scaled_data[2 + 32 * 32];
 gfx_sprite_t *bg_tile_scaled = (gfx_sprite_t *)bg_tile_scaled_data;
 
+// Lights
+#define MAX_LIGHTS 60
+typedef struct {
+  int x;
+  int y;
+} Point;
+Point light_positions[MAX_LIGHTS];
+int num_lights = 0;
+int light_timer = 0;
+int light_state = 0; // 0=Chase, 1=Flash
+int light_frame_index = 0;
+
 // Pre-scale helper
 void pre_scale_bg_tile(void) {
   if (!bg_tile_sprite)
@@ -86,6 +98,119 @@ void pre_scale_bg_tile(void) {
       dst[dst_r * 32 + dst_c + 1] = color;
       dst[(dst_r + 1) * 32 + dst_c] = color;
       dst[(dst_r + 1) * 32 + dst_c + 1] = color;
+    }
+  }
+}
+
+// 151x29 rect at 84,5.
+void init_lights(void) {
+  num_lights = 0;
+  int start_x = 84;
+  int start_y = 5;
+  int w = 151;
+  int h = 29;
+  int pitch = 8;
+
+  // Top Row: x from 84 to 84+151 (exclusive)
+  for (int x = start_x; x < start_x + w; x += pitch) {
+    if (num_lights < MAX_LIGHTS) {
+      light_positions[num_lights].x = x;
+      light_positions[num_lights].y = start_y;
+      num_lights++;
+    }
+  }
+
+  // Right Col: 3 lights centered vertically
+  // Center Y = 5 + 29/2 = 19.
+  // Offsets: -8, 0, +8 -> 11, 19, 27.
+  // Right X = 84 + 151 - 4 = 231.
+  int right_x = start_x + w - 4;
+  if (num_lights < MAX_LIGHTS) {
+    light_positions[num_lights++] = (Point){right_x, 11};
+  }
+  if (num_lights < MAX_LIGHTS) {
+    light_positions[num_lights++] = (Point){right_x, 19};
+  }
+  if (num_lights < MAX_LIGHTS) {
+    light_positions[num_lights++] = (Point){right_x, 27};
+  }
+
+  // Bottom Row: x from right to left
+  for (int x = start_x + w - 4 - pitch; x >= start_x; x -= pitch) {
+    if (num_lights < MAX_LIGHTS) {
+      light_positions[num_lights].x = x;
+      light_positions[num_lights].y = start_y + h - 4;
+      num_lights++;
+    }
+  }
+
+  // Left Col: 3 lights centered vertically
+  // Y: 27, 19, 11 (bottom up to keep loop order consistent-ish)
+  if (num_lights < MAX_LIGHTS) {
+    light_positions[num_lights++] = (Point){start_x, 27};
+  }
+  if (num_lights < MAX_LIGHTS) {
+    light_positions[num_lights++] = (Point){start_x, 19};
+  }
+  if (num_lights < MAX_LIGHTS) {
+    light_positions[num_lights++] = (Point){start_x, 11};
+  }
+}
+
+void draw_lights(void) {
+  if (num_lights == 0)
+    return;
+
+  // Calculate gap for 3 chains
+  int chain_gap = num_lights / 3;
+  if (chain_gap == 0)
+    chain_gap = 1;
+
+  for (int i = 0; i < num_lights; i++) {
+    bool lit = false;
+    if (light_state == 0) { // Chase
+      // Check against 3 chains
+      // We want i to match frame, frame + gap, frame + 2*gap
+      // Relative index in the cycle
+      int k = light_frame_index;
+
+      // Check each chain head and trail (head, -1, -2)
+      for (int c = 0; c < 3; c++) {
+        int head = (k + c * chain_gap) % num_lights;
+        if (i == head || i == (head + num_lights - 1) % num_lights ||
+            i == (head + num_lights - 2) % num_lights) {
+          lit = true;
+          break;
+        }
+      }
+    } else { // Flash
+      // Lit if frame is even (faster toggle)
+      if ((light_frame_index / 2) % 2 == 0) {
+        lit = true;
+      }
+    }
+
+    if (lit) {
+      gfx_TransparentSprite(light_lit, light_positions[i].x,
+                            light_positions[i].y);
+    } else {
+      gfx_TransparentSprite(light_unlit, light_positions[i].x,
+                            light_positions[i].y);
+    }
+  }
+}
+
+void update_lights(void) {
+  light_timer++;
+  if (light_state == 0) {  // Chase
+    if (light_timer > 0) { // Speed
+      light_timer = 0;
+      light_frame_index++;
+    }
+  } else { // Flash
+    if (light_timer > 2) {
+      light_timer = 0;
+      light_frame_index++;
     }
   }
 }
@@ -129,6 +254,9 @@ void shuffle_reels(void) {
 
 // --- Prototypes ---
 void init_gfx(void);
+void init_lights(void);
+void update_lights(void);
+void draw_lights(void);
 void shuffle_reels(void);
 void load_assets(void);
 void pre_scale_bg_tile(void);
@@ -148,6 +276,7 @@ int main(void) {
   unsigned int current_bet = 5;
 
   init_gfx();
+  init_lights(); // Init
   shuffle_reels();
   load_assets();
   pre_scale_bg_tile();
@@ -168,11 +297,15 @@ int main(void) {
   }
 
   while (true) {
+    // Reset to Chase mode when waiting for input
+
     current_bet = get_bet_input();
     if (current_bet == 0)
       break;
 
     g_data.money -= current_bet;
+
+    light_state = 0; // Chase during spin
 
     // Start Spin - begin from current displayed position
     for (int i = 0; i < NUM_REELS; i++) {
@@ -189,6 +322,9 @@ int main(void) {
 
     while (!all_stopped) {
       stop_timer++;
+
+      update_lights(); // Update animation
+
       // Rapid stop timing
       if (stop_timer > 30 && reels_stopped_count == 0) {
         reels[0].is_spinning = false;
@@ -216,12 +352,17 @@ int main(void) {
 
       draw_ui(current_bet, 0);
       draw_reels();
+      draw_lights(); // Draw lights on top
       gfx_SwapDraw();
     }
 
     int multiplier = check_win();
     unsigned int payout = current_bet * multiplier;
     g_data.money += payout;
+
+    if (payout > 0) {
+      light_state = 1; // Flash on win
+    }
 
     // Pity money check after losing spin
     if (g_data.money == 0)
@@ -245,29 +386,34 @@ int main(void) {
       int text_y = box_y + 15;
 
       // Display win message briefly (flash effect)
-      for (int f = 0; f < 12; f++) {
-        draw_ui(current_bet, (int)payout);
-        draw_reels();
+      for (int f = 0; f < 6; f++) {
+        // Break up the delay to animate lights smoothly
+        for (int d = 0; d < 4; d++) {
+          update_lights();
 
-        // Draw UI box background
-        gfx_SetColor(COL_BLACK);
-        gfx_FillRectangle(box_x, box_y, box_w, box_h);
-        gfx_SetColor(COL_GOLD);
-        gfx_Rectangle(box_x, box_y, box_w, box_h);
-        gfx_Rectangle(box_x + 2, box_y + 2, box_w - 4, box_h - 4);
+          draw_ui(current_bet, (int)payout);
+          draw_reels();
+          // Draw UI box background
+          gfx_SetColor(COL_BLACK);
+          gfx_FillRectangle(box_x, box_y, box_w, box_h);
+          gfx_SetColor(COL_GOLD);
+          gfx_Rectangle(box_x, box_y, box_w, box_h);
+          gfx_Rectangle(box_x + 2, box_y + 2, box_w - 4, box_h - 4);
 
-        // Draw text with flashing colors
-        gfx_SetTextScale(3, 3);
-        gfx_SetTextBGColor(COL_BLACK);
-        gfx_SetTextTransparentColor(COL_BLACK);
-        if (f % 2 == 0)
-          gfx_SetTextFGColor(COL_GOLD);
-        else
-          gfx_SetTextFGColor(COL_WHITE);
-        gfx_PrintStringXY(buf, text_x, text_y);
+          // Text
+          gfx_SetTextScale(3, 3);
+          gfx_SetTextBGColor(COL_BLACK);
+          gfx_SetTextTransparentColor(COL_BLACK);
+          if (f % 2 == 0)
+            gfx_SetTextFGColor(COL_GOLD);
+          else
+            gfx_SetTextFGColor(COL_WHITE);
+          gfx_PrintStringXY(buf, text_x, text_y);
 
-        gfx_SwapDraw();
-        delay(150);
+          draw_lights(); // Lights on top
+          gfx_SwapDraw();
+          delay(10);
+        }
       }
 
       // Reset text scale and colors
@@ -514,8 +660,11 @@ unsigned int get_bet_input(void) {
         ;
     }
 
+    update_lights(); // Update lights while waiting
+
     draw_ui(bet, 0);
     draw_reels();
+    draw_lights(); // Draw lights
 
     // Control text removed (in background now)
 
