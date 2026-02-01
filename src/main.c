@@ -33,12 +33,12 @@ const unsigned int bets[] = {5, 10, 25, 50, 100};
 #define NUM_BETS (sizeof(bets) / sizeof(bets[0]))
 
 typedef enum {
-  SYM_SIXSEVEN = 0,
-  SYM_TAPER,
-  SYM_TUNG,
-  SYM_SKIBIDI,
-  SYM_PORK,
-  SYM_NUGGET
+  SYM_SEVEN = 0,
+  SYM_DIAMOND,
+  SYM_BELL,
+  SYM_BAR,
+  SYM_LEMON,
+  SYM_CHERRY
 } symbol_type_t;
 
 typedef struct {
@@ -91,48 +91,11 @@ void pre_scale_bg_tile(void) {
 }
 
 // Helper to draw 16x16 sprite scaled to 32x32 with transparency
-void draw_scaled_sprite(gfx_sprite_t *sprite, int x, int y) {
-  // Manual VRAM writing for performance + clipping
-  uint8_t *data = sprite->data;
-  uint8_t *vram = (uint8_t *)gfx_vbuffer; // Use standard global for buffer
-  int clip_top = REEL_Y_START;
-  int clip_bottom = REEL_Y_START + REEL_WINDOW_H;
-
-  for (int r = 0; r < 16; r++) {
-    int vy = y + r * 2;
-    // Optimization: Skip rows completely out of bounds
-    if (vy >= clip_bottom)
-      break;
-    if (vy + 2 <= clip_top)
-      continue;
-
-    for (int c = 0; c < 16; c++) {
-      uint8_t color = data[r * 16 + c];
-      if (color == 0)
-        continue; // Transparent
-
-      int vx = x + c * 2;
-      // Draw 2x2 pixels with clipping
-      // Pixel 1 (Top-Left)
-      if (vy >= clip_top && vy < clip_bottom)
-        vram[vy * 320 + vx] = color;
-      // Pixel 2 (Top-Right)
-      if (vy >= clip_top && vy < clip_bottom)
-        vram[vy * 320 + vx + 1] = color;
-
-      // Pixel 3 (Bottom-Left)
-      if (vy + 1 >= clip_top && vy + 1 < clip_bottom)
-        vram[(vy + 1) * 320 + vx] = color;
-      // Pixel 4 (Bottom-Right)
-      if (vy + 1 >= clip_top && vy + 1 < clip_bottom)
-        vram[(vy + 1) * 320 + vx + 1] = color;
-    }
-  }
-}
+// void draw_scaled_sprite(gfx_sprite_t *sprite, int x, int y) { ... } REMOVED
 
 // Initial set for shuffling
 const symbol_type_t initial_reel_strip[NUM_SYMBOLS] = {
-    SYM_SIXSEVEN, SYM_TAPER, SYM_TUNG, SYM_SKIBIDI, SYM_PORK, SYM_NUGGET};
+    SYM_SEVEN, SYM_DIAMOND, SYM_BELL, SYM_BAR, SYM_LEMON, SYM_CHERRY};
 
 symbol_type_t reel_strips[NUM_REELS][NUM_SYMBOLS];
 
@@ -173,7 +136,9 @@ bool load_save(void);
 void save_game(void);
 void draw_ui(unsigned int current_bet, int win_amount);
 void draw_reels(void);
-void draw_scaled_sprite(gfx_sprite_t *sprite, int x, int y);
+void draw_reels(void);
+// void draw_scaled_sprite(gfx_sprite_t *sprite, int x, int y);
+void logic_spin_reels(void);
 void logic_spin_reels(void);
 int check_win(void);
 void draw_text_centered(const char *str, int y, uint8_t fg, uint8_t bg);
@@ -352,9 +317,9 @@ int check_win(void) {
 
   // 1. THREE OF A KIND
   if (r1 == r2 && r2 == r3) {
-    if (r1 == SYM_SIXSEVEN)
+    if (r1 == SYM_SEVEN)
       return 50;
-    if (r1 == SYM_TAPER)
+    if (r1 == SYM_DIAMOND)
       return 25;
     return 10;
   }
@@ -364,9 +329,9 @@ int check_win(void) {
     // Find which symbol is paired
     symbol_type_t pair_sym = (r1 == r2) ? r1 : r2;
 
-    if (pair_sym == SYM_SIXSEVEN)
+    if (pair_sym == SYM_SEVEN)
       return 3; // Profit
-    if (pair_sym == SYM_TAPER)
+    if (pair_sym == SYM_DIAMOND)
       return 2; // Small profit
     return 1;   // Any other pair gives money back
   }
@@ -441,10 +406,10 @@ void draw_reels(void) {
                    (REEL_WINDOW_H / 2) - (SYMBOL_H / 2);
       for (int s = 0; s < NUM_SYMBOLS; s++) {
         int draw_y = base_y + (s * SYMBOL_H);
-        // Adjusted check for larger scaled sprites (32x32)
         if (draw_y > REEL_Y_START - 32 &&
             draw_y < REEL_Y_START + REEL_WINDOW_H) {
-          draw_scaled_sprite(symbol_sprites[reel_strips[r][s]], x_pos, draw_y);
+          gfx_TransparentSprite(symbol_sprites[reel_strips[r][s]], x_pos,
+                                draw_y);
         }
       }
     }
@@ -543,12 +508,12 @@ void init_gfx(void) {
 void load_assets(void) {
   bg_sprite = slot_machine_bg;
   bg_tile_sprite = background_tile;
-  symbol_sprites[SYM_SIXSEVEN] = sym_sixseven;
-  symbol_sprites[SYM_NUGGET] = sym_nugget;
-  symbol_sprites[SYM_TUNG] = sym_tung;
-  symbol_sprites[SYM_SKIBIDI] = sym_skibidi;
-  symbol_sprites[SYM_PORK] = sym_pork;
-  symbol_sprites[SYM_TAPER] = sym_taper;
+  symbol_sprites[SYM_SEVEN] = sym_seven;
+  symbol_sprites[SYM_CHERRY] = sym_cherry;
+  symbol_sprites[SYM_BELL] = sym_bell;
+  symbol_sprites[SYM_BAR] = sym_bar;
+  symbol_sprites[SYM_LEMON] = sym_lemon;
+  symbol_sprites[SYM_DIAMOND] = sym_diamond;
 }
 
 bool load_save(void) {

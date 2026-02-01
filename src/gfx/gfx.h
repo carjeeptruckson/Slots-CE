@@ -9,12 +9,12 @@ extern "C" {
 #define all_game_assets_palette_offset 0
 #include "slot_machine_bg.h"
 #include "background_tile.h"
-#include "sym_sixseven.h"
-#include "sym_nugget.h"
-#include "sym_tung.h"
-#include "sym_skibidi.h"
-#include "sym_pork.h"
-#include "sym_taper.h"
+#include "sym_seven.h"
+#include "sym_cherry.h"
+#include "sym_bell.h"
+#include "sym_bar.h"
+#include "sym_lemon.h"
+#include "sym_diamond.h"
 
 #ifdef __cplusplus
 }

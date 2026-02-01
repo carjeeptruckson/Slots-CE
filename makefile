@@ -4,7 +4,7 @@
 
 NAME = SLOTS
 ICON = icon.png
-DESCRIPTION = "Brainrot Slots"
+DESCRIPTION = "Slot Machine Game"
 COMPRESSED = YES
 CFLAGS = -Wall -Wextra -Oz
 CXXFLAGS = -Wall -Wextra -Oz

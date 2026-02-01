@@ -14,12 +14,12 @@ converts:
 
       - "slot_machine_bg.png"
       - "background_tile.png"
-      - "sym_sixseven.png"
-      - "sym_nugget.png"
-      - "sym_tung.png"
-      - "sym_skibidi.png"
-      - "sym_pork.png"
-      - "sym_taper.png"
+      - "sym_seven.png"
+      - "sym_cherry.png"
+      - "sym_bell.png"
+      - "sym_bar.png"
+      - "sym_lemon.png"
+      - "sym_diamond.png"
 
 outputs:
   - type: c
