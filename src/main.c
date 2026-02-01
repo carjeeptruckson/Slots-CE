@@ -302,6 +302,11 @@ void logic_spin_reels(void) {
         reels[i].y_offset = target_y;
       } else {
         float step = dist * 0.35; // Snappier landing
+        // Fix: Cap the stopping speed to the max spin speed so it doesn't
+        // "speed up" when stopping from a large distance.
+        if (reels[i].speed > 0 && step > reels[i].speed) {
+          step = reels[i].speed;
+        }
         if (step < 2.0)
           step = 2.0;
         reels[i].y_offset += step;
@@ -361,7 +366,7 @@ void draw_ui(unsigned int current_bet, int win_amount) {
 
   char buffer[40];
   gfx_SetTextScale(2, 2);
-  gfx_SetTextFGColor(COL_BLACK);
+  gfx_SetTextFGColor(COL_WHITE);
   gfx_SetTextBGColor(COL_TRANSPARENT);
   gfx_SetTextTransparentColor(COL_TRANSPARENT);
 
