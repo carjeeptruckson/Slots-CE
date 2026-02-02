@@ -20,4 +20,6 @@ light_lit.h
 light_lit.c
 light_unlit.h
 light_unlit.c
+stat_button.h
+stat_button.c
 gfx.h

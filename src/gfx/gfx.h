@@ -17,6 +17,7 @@ extern "C" {
 #include "sym_diamond.h"
 #include "light_lit.h"
 #include "light_unlit.h"
+#include "stat_button.h"
 
 #ifdef __cplusplus
 }

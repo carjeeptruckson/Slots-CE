@@ -22,6 +22,7 @@ converts:
       - "sym_diamond.png"
       - "light_lit.png"
       - "light_unlit.png"
+      - "stat_button.png"
 
 outputs:
   - type: c
