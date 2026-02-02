@@ -24,6 +24,7 @@ A graphical slot machine game for the TI-84 Plus CE calculator, featuring smooth
 | **[DOWN]** | Decrease Bet (-$5) |
 | **[ENTER]** | Spin |
 | **[CLEAR]** | Exit Game |
+| **[STAT]** | Open Stats |
 
 ## Build Instructions
 
